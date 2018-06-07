@@ -2,7 +2,7 @@
 
 #Topic
 
-Menyelesaikan game puzzle light up(akari) menggunakan algoritma DFS
+Menyelesaikan game puzzle light up(akari) menggunakan algoritma BFS
 
 #Description
 
