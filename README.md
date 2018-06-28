@@ -2,7 +2,7 @@
 
 #Topic
 
-Menyelesaikan game puzzle light up(akari) menggunakan algoritma BFS
+Menyelesaikan game puzzle light up(akari) menggunakan algoritma DFS
 
 #Description
 
@@ -15,6 +15,7 @@ di tiap sisi sel tersebut. Dalam tiap baris dan kolom hanya akan berisi 1 lampu,
 boleh lebih.
 
 #Example
+
 ![Akari Puzzle](akari-puzzle.png)
 
 ![Akari Puzzle](example.png)
