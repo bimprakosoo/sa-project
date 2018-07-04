@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 /**
  *
- * @author OnyxzeD
+ * @author ALOLA
  */
 public class AkariPuzzle {
 
