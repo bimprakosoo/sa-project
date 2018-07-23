@@ -149,6 +149,112 @@ public class AkariPuzzle {
         }
         return neighbour;
     }
+    
+    public static void setRayRow(int[] cell) {
+        int row = cell[0];
+        int col = cell[1];
+        // left row
+        for (int left = (col - 1); left >= 0; left--) {
+            if (board[row][left] == 'E' || board[row][left] == 'R') {
+                board[row][left] = 'R';
+            } else {
+                break;
+            }
+        }
+        // right row
+        for (int right = (col + 1); right <= 6; right++) {
+            if (board[row][right] == 'E' || board[row][right] == 'R') {
+                board[row][right] = 'R';
+            } else {
+                break;
+            }
+        }
+    }
+
+    public static void setRayColumn(int[] cell) {
+        int row = cell[0];
+        int col = cell[1];
+        // up column
+        for (int up = (row - 1); up >= 0; up--) {
+            if (board[up][col] == 'E' || board[up][col] == 'R') {
+                board[up][col] = 'R';
+            } else {
+                break;
+            }
+        }
+        // down column
+        for (int down = (row + 1); down <= 6; down++) {
+            if (board[down][col] == 'E' || board[down][col] == 'R') {
+                board[down][col] = 'R';
+            } else {
+                break;
+            }
+        }
+    }
+
+    public static void setLamp(ArrayList<int[]> nbr) {
+        for (int index = 0; index < nbr.size(); index++) {
+            if (board[nbr.get(index)[0]][nbr.get(index)[1]] == 'E') {
+                board[nbr.get(index)[0]][nbr.get(index)[1]] = 'O';
+                setRayRow(nbr.get(index));
+                setRayColumn(nbr.get(index));
+                steps.add("Put Lamp in : [ " + nbr.get(index)[0] + ", " + nbr.get(index)[1] + " ]");
+            }
+        }
+    }
+
+    public static void Solve(int[] cell, int idx) {
+        ArrayList<int[]> nbr = getNeighbour(cell, "default");
+        ArrayList<int[]> lNbr = getNeighbour(cell, "lamp");
+        int neighbour = nbr.size() - lNbr.size();
+        System.out.println("Blackcell " + idx + " :  [ " + cell[0] + ", " + cell[1] + ", " + cell[2] + " ]");
+        if (cell[2] == nbr.size() || (lNbr.size() == cell[2]) || cell[2] == -1) {
+            // || (cell[2] == -1 && nbr.size() > 0)
+            if ((cell[2] == nbr.size() && lNbr.size() < cell[2])) {
+                setLamp(nbr);
+            }
+            // move blackCell to solved
+            blackCellSolved.add(blackCell.get(idx));
+            System.out.println("Solved");
+        } else {
+            ArrayList<int[]> temp = new ArrayList<int[]>();
+            // searching for candidate cell
+            for (int[] n : nbr) {
+                int c = 0;
+                for (int[] l : lNbr) {
+                    if (Arrays.equals(n, l)) {
+                        c++;
+                    }
+                }
+                if (c == 0) {
+                    ArrayList<int[]> tNbr = getNeighbour(n, "all");
+                    boolean candidate = true;
+                    for (int[] tn : tNbr) {
+                        int blackCons = 0;
+                        if (isBlack(tn)) {
+                            ArrayList<int[]> tLamp = getNeighbour(tn, "lamp");
+                            if (board[tn[0]][tn[1]] == 'B') {
+                                blackCons = -1;
+                            } else {
+                                blackCons = Character.getNumericValue(board[tn[0]][tn[1]]);
+                            }
+
+                            if ((tLamp.size() >= blackCons)) {
+                                candidate = false;
+                            }
+                        }
+                    }
+                    if (candidate) {
+                        temp.add(n);
+                        setLamp(temp);
+                        blackCellSolved.add(blackCell.get(idx));
+                        System.out.println("Solved");
+                    }
+                }
+            }
+        }
+        System.out.println("");
+    }
 
     public static void main(String[] args) {
 
@@ -169,6 +275,53 @@ public class AkariPuzzle {
 
         for (int[] b : blackCell){
             System.out.println("Black Cell : [ "+b[0]+", "+b[1]+", "+b[2]+" ]");
+        }
+        
+        temp = new ArrayList<int[]>();
+        // solving the blackcell first
+        System.out.println("\nSolving : \n");
+        while (blackCell.size() > 0) {
+            for (int i = 0; i < blackCell.size(); i++) {
+                Solve(blackCell.get(i), i);
+            }
+
+            // reset blackCell list
+            temp = new ArrayList<int[]>();
+            for (int[] a : blackCell) {
+                int check = 0;
+                for (int[] b : blackCellSolved) {
+                    if (a == b) {
+                        check++;
+                    }
+                }
+                if (check == 0) {
+                    temp.add(a);
+                }
+            }
+            blackCell = temp;
+        }
+
+        System.out.println("");
+        System.out.println("List Solved: ");
+        for (int j = 0; j < blackCellSolved.size(); j++) {
+            System.out.println("BlackCell " + (j + 1) + " : [ " + blackCellSolved.get(j)[0] + ", " + blackCellSolved.get(j)[1] + ", " + blackCellSolved.get(j)[2] + " ]");
+        }
+
+        System.out.println("");
+        System.out.println("List Unsolved: ");
+        if (blackCell.size() > 0) {
+            for (int j = 0; j < blackCell.size(); j++) {
+                System.out.println("BlackCell " + (j + 1) + " : [ " + blackCell.get(j)[0] + ", " + blackCell.get(j)[1] + ", " + blackCell.get(j)[2] + " ]");
+            }
+        }
+        
+        // print result
+        System.out.println("\nResult : ");
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println("");
         }
     }
 }
