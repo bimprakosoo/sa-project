@@ -24,22 +24,22 @@ public class AkariPuzzle {
 //        {'B', 'E', 'E', 'E', 'E', 'E', 'E'},
 //        {'E', 'E', 'E', 'E', 'E', 'E', '3'},
 //        {'E', '2', 'E', 'E', 'B', 'E', 'E'},};
-    public static char[][] board = {
-        {'E', 'E', 'E', 'E', 'E', 'B', 'E'},
-        {'3', 'E', 'E', 'E', 'B', 'E', 'E'},
-        {'E', '4', 'E', 'E', 'E', 'E', 'E'},
-        {'E', 'E', 'E', 'E', 'E', 'E', 'E'},
-        {'E', 'E', 'E', 'E', 'E', '3', 'E'},
-        {'E', 'E', 'B', 'E', 'E', 'E', '3'},
-        {'E', 'B', 'E', 'E', 'E', 'E', 'E'},};
 //    public static char[][] board = {
-//        {'E', 'E', 'E', 'B', 'E', 'E', 'E'},
+//        {'E', 'E', 'E', 'E', 'E', 'B', 'E'},
+//        {'3', 'E', 'E', 'E', 'B', 'E', 'E'},
+//        {'E', '4', 'E', 'E', 'E', 'E', 'E'},
 //        {'E', 'E', 'E', 'E', 'E', 'E', 'E'},
-//        {'E', 'E', 'E', '4', 'E', 'E', 'E'},
-//        {'B', 'E', '4', 'E', '2', 'E', '1'},
-//        {'E', 'E', 'E', '3', 'E', 'E', 'E'},
-//        {'E', 'E', 'E', 'E', 'E', 'E', 'E'},
-//        {'E', 'E', 'E', '1', 'E', 'E', 'E'},};
+//        {'E', 'E', 'E', 'E', 'E', '3', 'E'},
+//        {'E', 'E', 'B', 'E', 'E', 'E', '3'},
+//        {'E', 'B', 'E', 'E', 'E', 'E', 'E'},};
+    public static char[][] board = {
+        {'E', 'E', 'E', 'B', 'E', 'E', 'E'},
+        {'E', 'E', 'E', 'E', 'E', 'E', 'E'},
+        {'E', 'E', 'E', '4', 'E', 'E', 'E'},
+        {'B', 'E', '4', 'E', '2', 'E', '1'},
+        {'E', 'E', 'E', '3', 'E', 'E', 'E'},
+        {'E', 'E', 'E', 'E', 'E', 'E', 'E'},
+        {'E', 'E', 'E', '1', 'E', 'E', 'E'},};
 //    public static char[][] board = {
 //        {'E', 'E', 'E', 'E', 'E', 'E', 'E'},
 //        {'E', 'E', 'B', 'E', '3', 'E', 'E'},
@@ -256,8 +256,27 @@ public class AkariPuzzle {
         System.out.println("");
     }
 
-    public static void solving(){
+    public static void solving() {
+
+    }
+
+    public static void main(String[] args) {
+
+        // scanning blackcell
+        getBlackCell();
+        // sorting
+        int max = 4;
         ArrayList<int[]> temp = new ArrayList<int[]>();
+        while (max > -2) {
+            for (int i = 0; i < blackCell.size(); i++) {
+                if (blackCell.get(i)[2] == max) {
+                    temp.add(new int[]{blackCell.get(i)[0], blackCell.get(i)[1], blackCell.get(i)[2]});
+                }
+            }
+            max -= 1;
+        }
+        blackCell = temp;
+        
         temp = new ArrayList<int[]>();
         // solving the blackcell first
         System.out.println("\nSolving : \n");
@@ -295,7 +314,7 @@ public class AkariPuzzle {
                 System.out.println("BlackCell " + (j + 1) + " : [ " + blackCell.get(j)[0] + ", " + blackCell.get(j)[1] + ", " + blackCell.get(j)[2] + " ]");
             }
         }
-        
+
         // print result
         System.out.println("\nResult : ");
         for (int i = 0; i < board.length; i++) {
@@ -304,28 +323,8 @@ public class AkariPuzzle {
             }
             System.out.println("");
         }
-    }
-    public static void main(String[] args) {
-
-        // scanning blackcell
-        getBlackCell();
-        // sorting
-        int max = 4;
-        ArrayList<int[]> temp = new ArrayList<int[]>();
-        while (max > -2) {
-            for (int i = 0; i < blackCell.size(); i++) {
-                if (blackCell.get(i)[2] == max) {
-                    temp.add(new int[]{blackCell.get(i)[0], blackCell.get(i)[1], blackCell.get(i)[2]});
-                }
-            }
-            max -= 1;
-        }
-        blackCell = temp;
-
         for (int[] b : blackCell) {
             System.out.println("Black Cell : [ " + b[0] + ", " + b[1] + ", " + b[2] + " ]");
         }
-        Display pl = new Display();
-        pl.setVisible(true);
     }
 }
